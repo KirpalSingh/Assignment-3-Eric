@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<!--
+Created using JS Bin
+http://jsbin.com
+
+Copyright (c) 2015 by ebrelsford (http://jsbin.com/migeqo/2/edit)
+
+Released under the MIT license: http://jsbin.mit-license.org
+-->
+<meta name="robots" content="noindex">
+<html>
+<head>
+  
+   
+  <link rel="stylesheet" href="libraries/Leaflet.markercluster-master/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+
+  <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+
+  <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="libraries/Leaflet.markercluster-master/dist/leaflet.markercluster.js"></script>
+
+  
+
+  <meta charset="utf-8">
+  <title>JS Bin</title>
+<style id="jsbin-css">
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+
+#map {
+  width: 100%;
+  height: 100%; 
+}
+</style>
+</head>
+<body>
+  <div id="map"></div>
+<script id="jsbin-javascript">
+// Leaflet: styling circle markers
+//
+// Show the top 25 most expensive AirBnB rentals in New York
+// using CartoDB's SQL API.
+//
+
+$(document).ready(function () {
+  // Create a map centered on NYC
+  var map = L.map('map').setView([40.731649,-73.977814], 10);
+  
+  // Add a base layer. We're using Stamen's Toner:
+  //  http://maps.stamen.com/#toner
+  L.tileLayer('http://tile.stamen.com/toner/{z}/{x}/{y}.png', {
+    attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>.',
+    maxZoom: 18
+}).addTo(map);
+
+  // Ask CartoDB for the top 25 most expensive features, as GeoJSON
+  
+  $.getJSON('https://sadra1.cartodb.com/api/v2/sql?q=SELECT * FROM table_311homeless &format=GeoJSON')
+
+   
+
+
+    // When it's done, add the results to the map
+    .done(function (data) {
+    
+        
+       
+
+          var markers = L.markerClusterGroup();
+    var geoJsonLayer = L.geoJson(data, {
+      onEachFeature: function (feature, layer) {
+        layer.bindPopup(feature.properties.address_type);
+      }
+    });
+    markers.addLayer(geoJsonLayer);
+    map.addLayer(markers);
+
+        
+
+});
+});    
+</script>
+</body>
+</html>
